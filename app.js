@@ -189,6 +189,14 @@
     const url = normalizeUrl(input);
     if (!url) return;
 
+    // ANTON und andere stark blockierte Seiten → sofort neuer Tab
+    if (url.includes('anton.app')) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+      log('info', 'ANTON direkt in neuem Tab geöffnet:', url);
+      // Optional: auf Startseite bleiben
+      return;
+    }
+
     const tab = getActiveTab();
     if (!tab) return;
 
@@ -400,7 +408,15 @@
       el.addEventListener('click', (e) => {
         e.preventDefault();
         const url = el.dataset.url;
-        if (url) navigate(url);
+        if (!url) return;
+
+        // ANTON und andere blockierte Seiten direkt in neuem Tab öffnen
+        if (isProbablyBlocked(url) || url.includes('anton.app')) {
+          window.open(url, '_blank', 'noopener,noreferrer');
+          log('info', 'Direkt in neuem Tab geöffnet:', url);
+          return;
+        }
+        navigate(url);
       });
     });
 
