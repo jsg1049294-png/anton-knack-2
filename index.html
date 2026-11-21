@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0a1628" />
+  <title>ANTON KNACK 2</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>" />
+</head>
+<body>
+  <div id="app">
+    <!-- Tab Bar -->
+    <div id="tab-bar">
+      <div id="tabs"></div>
+      <button id="new-tab-btn" class="icon-btn" title="Neuer Tab">+</button>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div id="nav-bar">
+      <button id="back-btn" class="icon-btn" title="Zurück" disabled>←</button>
+      <button id="forward-btn" class="icon-btn" title="Vor" disabled>→</button>
+      <button id="reload-btn" class="icon-btn" title="Neu laden">↻</button>
+      <button id="home-btn" class="icon-btn" title="Startseite">⌂</button>
+      <div id="address-container">
+        <input id="address-bar" type="text" placeholder="URL oder Google-Suche eingeben..." autocomplete="off" spellcheck="false" />
+        <button id="go-btn" class="icon-btn" title="Gehen">➔</button>
+      </div>
+      <button id="google-btn" class="icon-btn accent" title="Google Suche">G</button>
+      <button id="devtools-btn" class="icon-btn" title="Developer Tools">⚙</button>
+      <button id="fullscreen-btn" class="icon-btn" title="Vollbild">⛶</button>
+    </div>
+
+    <!-- Content Area -->
+    <div id="content-area">
+      <div id="start-page" class="page active">
+        <div class="start-header">
+          <h1>ANTON KNACK 2</h1>
+          <p>Dein Online-Browser für das Schul-iPad</p>
+        </div>
+        <div class="search-box">
+          <input id="start-search" type="text" placeholder="Google durchsuchen..." />
+          <button id="start-search-btn">Suchen</button>
+        </div>
+        <div class="shortcuts">
+          <a class="shortcut" data-url="https://www.google.com">
+            <div class="shortcut-icon">🔍</div>
+            <span>Google</span>
+          </a>
+          <a class="shortcut" data-url="https://anton.app">
+            <div class="shortcut-icon">📚</div>
+            <span>ANTON</span>
+          </a>
+          <a class="shortcut" data-url="https://www.wikipedia.org">
+            <div class="shortcut-icon">📖</div>
+            <span>Wikipedia</span>
+          </a>
+          <a class="shortcut" data-url="https://www.youtube.com">
+            <div class="shortcut-icon">▶️</div>
+            <span>YouTube</span>
+          </a>
+          <a class="shortcut" data-url="https://github.com">
+            <div class="shortcut-icon">🐙</div>
+            <span>GitHub</span>
+          </a>
+          <a class="shortcut" data-url="https://www.bing.com">
+            <div class="shortcut-icon">🅱️</div>
+            <span>Bing</span>
+          </a>
+        </div>
+        <div class="info-box">
+          <h3>Hinweis zu ANTON.APP</h3>
+          <p>Viele Schulplattformen (inkl. anton.app) blockieren die Einbettung in iframes aus Sicherheitsgründen. In diesem Fall erscheint ein großer Button „In neuem Tab öffnen“.</p>
+        </div>
+      </div>
+
+      <div id="iframe-container" class="page">
+        <iframe id="browser-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads" allowfullscreen></iframe>
+        <div id="blocked-overlay" class="hidden">
+          <div class="blocked-content">
+            <div class="blocked-icon">🔒</div>
+            <h2>Seite kann nicht eingebettet werden</h2>
+            <p id="blocked-message">Diese Website verhindert die Anzeige in einem Frame (X-Frame-Options / CSP).</p>
+            <p class="blocked-url" id="blocked-url"></p>
+            <button id="open-external-btn" class="primary-btn">In neuem Tab öffnen</button>
+            <button id="try-again-btn" class="secondary-btn">Erneut versuchen</button>
+          </div>
+        </div>
+        <div id="loading-indicator" class="hidden">
+          <div class="spinner"></div>
+          <span>Lade...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DevTools Panel -->
+    <div id="devtools" class="hidden">
+      <div class="devtools-header">
+        <div class="devtools-tabs">
+          <button class="dt-tab active" data-panel="console">Console</button>
+          <button class="dt-tab" data-panel="elements">Elements</button>
+          <button class="dt-tab" data-panel="network">Network</button>
+          <button class="dt-tab" data-panel="info">Info</button>
+        </div>
+        <button id="close-devtools" class="icon-btn">×</button>
+      </div>
+      <div class="devtools-body">
+        <div id="panel-console" class="dt-panel active">
+          <div id="console-output"></div>
+          <div class="console-input-row">
+            <span>&gt;</span>
+            <input id="console-input" type="text" placeholder="JavaScript ausführen..." />
+          </div>
+        </div>
+        <div id="panel-elements" class="dt-panel">
+          <div class="elements-toolbar">
+            <button id="inspect-btn">Aktuelle Seite inspizieren</button>
+          </div>
+          <pre id="elements-output">// Klicke auf „Aktuelle Seite inspizieren“
+// Hinweis: Cross-Origin Seiten können aus Sicherheitsgründen
+// nicht vollständig inspiziert werden (Same-Origin-Policy).</pre>
+        </div>
+        <div id="panel-network" class="dt-panel">
+          <div id="network-list">
+            <div class="network-empty">Keine Netzwerk-Anfragen protokolliert (Client-seitig limitiert).</div>
+          </div>
+        </div>
+        <div id="panel-info" class="dt-panel">
+          <h3>ANTON KNACK 2 – Developer Info</h3>
+          <p><strong>Realistische Einschränkungen:</strong></p>
+          <ul>
+            <li>Reine GitHub-Pages-Seiten können fremde Websites nicht vollständig inspizieren (CORS / Same-Origin-Policy).</li>
+            <li>Echte DevTools (Elements, Network, Sources) für beliebige Seiten benötigen einen Remote-Browser (z. B. Chromium via Browserless, Playwright oder eigene VPS).</li>
+            <li>Kostenlose dauerhafte Remote-Browser-Dienste sind selten und oft limitiert.</li>
+            <li>Diese Console fängt console.*-Aufrufe der eigenen App ab und erlaubt einfache JS-Ausführung im Kontext dieser Seite.</li>
+          </ul>
+          <p><strong>Empfohlene echte Lösung:</strong> Eigenen kleinen Backend-Service mit Playwright/Puppeteer hosten (z. B. auf Render.com Free, Railway oder Fly.io) und hier anbinden.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
